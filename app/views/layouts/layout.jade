@@ -43,12 +43,13 @@ body
             .seven.wide.column
               h4.ui.inverted.header Crédits
               p
-                | Ce service a été développé pour ObsiFight par
+                | Ce service a été développé pour ObsiFight par&nbsp;
                 a(href='http://eywek.fr') Eywek
                 | .
-              p Version actuelle du service : {{version}}
+              p Version actuelle du service : #{version}
   block scripts
     script(src='/assets/js/jquery-3.1.1.min.js')
     script(src='/assets/js/semantic.min.js')
     script(src='/assets/js/app.js')
     script(src='/assets/js/stickyFooter.js')
+  block custom

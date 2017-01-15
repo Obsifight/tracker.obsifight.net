@@ -1,0 +1,32 @@
+/* ======
+*  GLOBAL
+*/
+
+body {
+  background: #efefef;
+}
+
+/* ======
+*  NAV
+*/
+
+header nav {
+  margin-top: 20px;
+  margin-bottom: 40px;
+}
+
+header nav .ui.menu .header.item img {
+  width: 50px;
+}
+
+/* ======
+*  FOOTER
+*/
+
+footer {
+  margin-top: 50px;
+}
+
+.footer.segment {
+  padding: 5em 0em;
+}

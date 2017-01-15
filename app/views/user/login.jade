@@ -1,0 +1,80 @@
+extends ../layouts/layout
+
+block content
+  .ui.middle.aligned.center.aligned.grid
+    .column(style="max-width: 450px;")
+        h2.ui.grey.image.header
+          .content
+            | Connectez-vous
+        form.ui.large.form
+          .ui.stacked.segment
+            .ajax-msg(style="margin-bottom: 10px;")
+            .field
+              .ui.left.icon.input
+                i.user.icon
+                input(type='text', name='username', placeholder='Pseudo')
+            .field
+              .ui.left.icon.input
+                i.lock.icon
+                input(type='password', name='password', placeholder='Mot de passe')
+            .ui.fluid.large.green.submit.button Se connecter
+          .ui.error.message
+        .ui.negative.message
+          .header Accès restreint
+          p Vous ne pouvez accéder à ce service uniquement si votre grade vous le permet.
+block custom
+  script(type='application/javascript').
+    // Form validation
+    $('.ui.form').form({
+      fields: {
+        username : ['minLength[3]', 'maxLength[16]', 'empty'],
+        password : ['minLength[3]', 'empty'],
+      }
+    });
+    // Form submission
+    $('form').on('submit', function (e) {
+      e.preventDefault()
+      // vars
+      var form = $(this)
+      var inputs = {
+        username: form.find('input[name="username"]').val(),
+        password: form.find('input[name="password"]').val()
+      }
+
+      // loading
+      form.find('.ui.stacked.segment').prepend('<div class="ui active inverted dimmer"><div class="ui text loader">Connexion en cours...</div></div>')
+
+      // send request
+      $.post('/login', inputs, function (data) {
+        if (!data.status)
+          return form.find('.ajax-msg').hide().html('<div class="ui negative message"><p>' + data.error + '</p></div>').fadeIn(150)
+        // success
+        form.find('.ajax-msg').hide().html('<div class="ui positive message"><p>Vous vous êtes bien connecté ! Vous allez être redirigé...</p></div>').fadeIn(150)
+        // redirect
+        var returnUrl = urlParam('b')
+        if (!returnUrl)
+          window.location = '/'
+        else
+          window.location = returnUrl
+      })
+      .fail(function (res, status, msg) {
+        switch (res.status) {
+          case 400:
+            form.find('.ajax-msg').hide().html('<div class="ui negative message"><p>La requête est invalide. Veuillez envoyer les informations indiquées sur le formulaire.</p></div>').fadeIn(150)
+            break;
+          case 404:
+            form.find('.ajax-msg').hide().html('<div class="ui negative message"><p>Votre compte est introuvable.</p></div>').fadeIn(150)
+            break;
+          case 403:
+            form.find('.ajax-msg').hide().html('<div class="ui negative message"><p>Vos identifiants sont incorrects ou vous n\'êtes pas abilité pour accéder à cet outil.</p></div>').fadeIn(150)
+            break;
+          default:
+            console.error(res, status, msg)
+            form.find('.ajax-msg').hide().html('<div class="ui negative message"><p>Une erreur interne est survenue pendant la connexion. Veuillez rééssayez.</p></div>').fadeIn(150)
+        }
+      })
+      .always(function() {
+        // remove loading
+        form.find('.dimmer').remove()
+      })
+    })

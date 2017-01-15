@@ -4,6 +4,15 @@
 const express = require('express')
 const app = express()
 const path = require('path')
+const fs = require('fs')
+const session = require('express-session')
+
+// ===========
+//    BODY
+// ===========
+var bodyParser = require('body-parser')
+app.use(bodyParser.urlencoded({extended: true}))
+app.use(bodyParser.json())
 
 // ===========
 //   VIEWS
@@ -12,10 +21,26 @@ app.use(express.static('public'))
 app.set('view engine', 'jade')
 app.set('views', path.join(__dirname, '/app/views'))
 
+app.locals.version = fs.readFileSync('./VERSION')
+
+// =============
+//   SESSIONS
+// =============
+app.set('trust proxy', 1) // trust first proxy
+app.use(session({
+  secret: '8Mta7Y4rX7KkBJLQ4cnc27Anp5L25b',
+  resave: true,
+  saveUninitialized: true,
+  cookie: {
+    secure: true
+  }
+}))
+
 // ===========
 //   CONFIG
 // ===========
 const config = require('./app/config/global')
+global.config = config
 
 // ===========
 //   ROUTES
@@ -49,11 +74,13 @@ for (var route in routes) {
 app.use(function (req, res, next) {
   res.status(404)
   log.warn('Get 404 on ' + req.originalUrl)
+  res.send()
 })
 app.use(function (err, req, res, next) {
   log.error('Get 500 on ' + req.originalUrl)
   console.error(err)
   res.status(500)
+  res.send()
 })
 
 // ===========
