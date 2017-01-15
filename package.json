@@ -1,0 +1,19 @@
+{
+  "name": "tracker",
+  "version": "2.0.0",
+  "description": "Tracker users data of obsifight network",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@gitlab.com/obsifight/tracker.git"
+  },
+  "author": "Eywek <contact@eywek.fr>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://gitlab.com/obsifight/tracker/issues"
+  },
+  "homepage": "https://gitlab.com/obsifight/tracker#README"
+}
