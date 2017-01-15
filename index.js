@@ -29,10 +29,10 @@ app.locals.version = fs.readFileSync('./VERSION')
 app.set('trust proxy', 1) // trust first proxy
 app.use(session({
   secret: '8Mta7Y4rX7KkBJLQ4cnc27Anp5L25b',
-  resave: true,
-  saveUninitialized: true,
+  resave: false,
+  saveUninitialized: false,
   cookie: {
-    secure: true
+    secure: false
   }
 }))
 

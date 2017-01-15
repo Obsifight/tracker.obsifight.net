@@ -1,4 +1,42 @@
 extends ../layouts/layout
 
 block content
-  | coucou
+  .ui.container
+    .ui.segment.three.column.doubling.stackable.grid
+
+      .column.center.aligned.grid
+        h3.ui.header
+          .content
+            | Rechercher un joueur
+            .sub.header Récupérer toutes les données d'un joueur
+
+        .ui.action.left.icon.input
+          i.search.icon
+          input(type='text', placeholder='Pseudo')
+          button.ui.button Chercher
+
+      .ui.vertical.divider OU
+
+      .column.center.aligned.grid
+        h3.ui.header
+          .content
+            | Rechercher une IP
+            .sub.header Récupérer tous les joueurs avec cette IP
+
+        .ui.action.left.icon.input
+          i.search.icon
+          input(type='text', placeholder='Pseudo')
+          button.ui.button Chercher
+
+      .ui.vertical.divider OU
+
+      .column.center.aligned.grid
+        h3.ui.header
+          .content
+            | Rechercher une adresse MAC
+            .sub.header Récupérer tous joueurs avec cette adresse MAC
+
+        .ui.action.left.icon.input
+          i.search.icon
+          input(type='text', placeholder='Pseudo')
+          button.ui.button Chercher
