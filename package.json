@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://gitlab.com/obsifight/tracker/issues"
   },
-  "homepage": "https://gitlab.com/obsifight/tracker#README"
+  "homepage": "https://gitlab.com/obsifight/tracker#README",
+  "dependencies": {
+    "express": "^4.14.0"
+  }
 }

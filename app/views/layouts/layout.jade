@@ -1,0 +1,54 @@
+include ./head
+
+body
+  block header
+    header
+      block navigation
+        nav.ui.container
+          .ui.menu
+            .header.item
+              img(src='/assets/img/logo.png', alt='ObsiFight')
+            a.active.item Accueil
+            a.item(href='http://forum.obsifight.net') Forum
+            .right.menu
+              .item
+                .ui.action.left.icon.input
+                  i.search.icon
+                  input(type='text', placeholder='Pseudo')
+                  button.ui.button Chercher
+              a.item(href='https://obsifight.net')
+                small
+                  em Retourner sur obsifight.net
+  block content
+
+  block footer
+    footer
+      .ui.inverted.vertical.footer.segment
+        .ui.container
+          .ui.stackable.inverted.divided.equal.height.stackable.grid
+            .three.wide.column
+              h4.ui.inverted.header Informations
+              .ui.inverted.link.list
+                a.item(href='http://forum.obsifight.net/forums/bugs-site-et-boutique.104/') Signaler un problème
+                a.item(href='http://forum.obsifight.net/misc/contact') Nous contacter
+                a.item(href='https://obsifight.net/nous-rejoindre/') Nous rejoindre
+                a.item(href='https://obsifight.net/shop/') Boutique
+            .three.wide.column
+              h4.ui.inverted.header Services
+              .ui.inverted.link.list
+                a.item(href='https://obsifight.net') Site
+                a.item(href='http://forum.obsifight.net') Forum
+                a.item(href='https://wiki.obsifight.net') Wiki
+                a.item(href='http://incidents.obsifight.net') Incidents
+            .seven.wide.column
+              h4.ui.inverted.header Crédits
+              p
+                | Ce service a été développé pour ObsiFight par
+                a(href='http://eywek.fr') Eywek
+                | .
+              p Version actuelle du service : {{version}}
+  block scripts
+    script(src='/assets/js/jquery-3.1.1.min.js')
+    script(src='/assets/js/semantic.min.js')
+    script(src='/assets/js/app.js')
+    script(src='/assets/js/stickyFooter.js')
