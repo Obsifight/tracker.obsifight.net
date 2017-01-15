@@ -1,0 +1,9 @@
+#<IfModule mod_rewrite.c>
+#   RewriteEngine on
+#
+#   RewriteRule ^dist/.*$ - [PT]
+#
+#   RewriteCond %{REQUEST_URI} !index.php
+#   #RewriteRule    (.*)\.json user.php?user=$1 [L]
+#   RewriteRule    ^user/(.*)$ user.php?user=$1 [L]
+#</IfModule>

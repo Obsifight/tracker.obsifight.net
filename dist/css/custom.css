@@ -1,0 +1,217 @@
+body {
+  background-color: rgb(252, 252, 252);
+
+  position: relative;
+}
+
+html,body {
+  width: 100%;
+  height: 100%;
+}
+
+.center-horizontally {
+  margin-top: 15%;
+}
+
+div.time {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  color: #AAB2BD;
+}
+
+div#error-404 {
+  font-size: 10em;
+  color: #d9d9d9;
+  text-align: center;
+}
+
+.breadcrumb-arrow li a::before {
+  border-left-color: #DA4453;
+}
+.breadcrumb-arrow li a::after {
+  border-left: 11px solid #DA4453;
+}
+
+.breadcrumb-arrow li a:focus::before, .breadcrumb-arrow li a:hover::before {
+  border-left-color:#fa8a35;
+}
+
+.breadcrumb-arrow li a {
+  background-color: #DA4453;
+  border: 1px solid #DA4453;
+}
+
+.breadcrumb-arrow li a:focus, .breadcrumb-arrow li a:hover {
+  background-color: #fa8a35;
+  border: 1px solid #fa8a35;
+}
+
+.panel-primary>.panel-heading {
+  background-color: #DA4453;
+  border-color: #DA4453;
+}
+
+/* Connected */
+
+.well.connected {
+  position: absolute;
+  top: 10px;
+  right:10px;
+
+  width:250px;
+
+  z-index: 999;
+}
+
+/* LABEL - RANK */
+/*
+Links : http://bootflat.github.io/color-picker.html
+        http://bootflat.github.io/documentation.html
+*/
+
+.label-white {
+  background-color: #CCD1D9;
+  border-color: #CCD1D9;
+}
+
+.label-green {
+  background-color: #48CFAD;
+  border-color: #48CFAD;
+}
+
+.label-dark-green {
+  background-color: #37BC9B;
+  border-color: #37BC9B;
+}
+
+.label-red {
+  background-color: #DA4453;
+  border-color: #DA4453;
+}
+
+.label-gold {
+  background-color: #F6BB42;
+  border-color: #F6BB42;
+}
+
+.label-yellow {
+  background-color: #FFCE54;
+  border-color: #FFCE54;
+}
+
+.label-blue {
+  background-color: #5D9CEC;
+  border-color: #5D9CEC;
+}
+
+.label-aqua {
+  background-color: #4FC1E9;
+  border-color: #4FC1E9;
+}
+
+.label-dark-aqua {
+  background-color: #3BAFDA;
+  border-color: #3BAFDA;
+}
+
+.label-dark-purple {
+  background-color: #967ADC;
+  border-color: #967ADC;
+}
+
+.nav-header {
+  padding-top: 50px;
+  border-top: 1px solid #DA4453;
+  background: url('../img/header-pattern.png');
+
+  border-bottom: 3px solid #DA4453;
+
+  margin-bottom: 30px;
+}
+
+.navbar-custom {
+  position: fixed;
+  top: 0;
+  left: 0;
+  border: none;
+  border-radius: 0;
+  background-color: rgba(255,255,255,.9);
+  width: 100%;
+  z-index: 2000;
+}
+
+.header {
+  position: relative;
+  padding: 50px 0 110px;
+}
+
+
+
+.bs-callout {
+    padding: 20px;
+    margin: 20px 0;
+    border: 1px solid #eee;
+    border-left-width: 5px;
+    border-radius: 3px
+}
+
+.bs-callout h4 {
+    margin-top: 0;
+    margin-bottom: 5px
+}
+
+.bs-callout p:last-child {
+    margin-bottom: 0
+}
+
+.bs-callout code {
+    border-radius: 3px
+}
+
+.bs-callout+.bs-callout {
+    margin-top: -5px
+}
+
+.bs-callout-danger {
+    border-left-color: #ce4844
+}
+
+.bs-callout-danger h4 {
+    color: #ce4844
+}
+
+.bs-callout-warning {
+    border-left-color: #aa6708
+}
+
+.bs-callout-warning h4 {
+    color: #aa6708
+}
+
+.bs-callout-info {
+    border-left-color: #1b809e
+}
+
+.bs-callout-info h4 {
+    color: #1b809e
+}
+
+.margin-top-50 {
+  margin-top: 50px;
+}
+
+footer {
+  padding: 20px 0!important;
+  margin-top:30px;
+}
+
+.custom {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.lead {
+  font-size:18px;
+}
