@@ -7,6 +7,44 @@ const path = require('path')
 const fs = require('fs')
 const session = require('express-session')
 
+// =====================
+//    CUSTOM FUNCTIONS
+// =====================
+app.use((req, res, next) => {
+  res.notFound = () => {
+    res.status(404)
+    log.warn('Get 404 on ' + req.originalUrl)
+    res.render('errors/error', {title: 'Page introuvable', error: "La page demandée n'a pas été trouvée."})
+  }
+  res.forbidden = () => {
+    res.status(403)
+    log.warn('Get 403 on ' + req.originalUrl)
+    res.render('errors/error', {title: 'Accès non autorisé', error: "Vous n'êtes pas autorisé à accéder à cette page."})
+  }
+  res.internalError = (err) => {
+    res.status(500)
+    log.warn('Get 500 on ' + req.originalUrl)
+    console.error(err)
+    res.render('errors/error', {title: 'Erreur interne', error: "Une erreur interne est survenue. Veuillez rééssayer."})
+  }
+  res.badRequest = (err) => {
+    res.status(400)
+    log.warn('Get 400 on ' + req.originalUrl)
+    console.error(err)
+    res.render('errors/error', {title: 'Requête invalide', error: "La requête envoyée au serveur est invalide."})
+  }
+  res.error = (code, message) => {
+    res.status(code)
+    log.warn('Get custom error (' + code + ': ' + message + ') on ' + req.originalUrl)
+    res.render('errors/error', {
+      code: code,
+      error: message,
+      title: 'Une erreur est survenue'
+    })
+  }
+  next()
+})
+
 // ===========
 //    BODY
 // ===========
@@ -22,6 +60,9 @@ app.set('view engine', 'jade')
 app.set('views', path.join(__dirname, '/app/views'))
 
 app.locals.version = fs.readFileSync('./VERSION')
+const moment = require('moment')
+moment.locale('fr')
+app.locals.moment = moment
 
 // =============
 //   SESSIONS
@@ -71,16 +112,21 @@ for (var route in routes) {
 // ===========
 //   ERRORS
 // ===========
-app.use(function (req, res, next) {
+app.use((req, res, next) => {
   res.status(404)
   log.warn('Get 404 on ' + req.originalUrl)
-  res.send()
+  res.render('errors/error', {title: 'Page introuvable', error: "La page demandée n'a pas été trouvée."})
 })
-app.use(function (err, req, res, next) {
+app.use((req, res, next) => {
+  res.status(403)
+  log.warn('Get 403 on ' + req.originalUrl)
+  res.render('errors/error', {title: 'Accès non autorisé', error: "Vous n'êtes pas autorisé à accéder à cette page."})
+})
+app.use((err, req, res, next) => {
   log.error('Get 500 on ' + req.originalUrl)
   console.error(err)
   res.status(500)
-  res.send()
+  res.render('errors/error', {title: 'Erreur interne', error: "Une erreur interne est survenue. Veuillez rééssayer."})
 })
 
 // ===========

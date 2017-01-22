@@ -1,8 +1,15 @@
 extends ../layouts/layout
 
 block content
+  style.
+    .ui.vertical.divider {
+      left: 100%;
+    }
+    .ui.action {
+      margin-bottom: 30px;
+    }
   .ui.container
-    .ui.segment.three.column.doubling.stackable.grid
+    .ui.segment.equal.width.doubling.stackable.grid
 
       .column.center.aligned.grid
         h3.ui.header
@@ -10,12 +17,17 @@ block content
             | Rechercher un joueur
             .sub.header Récupérer toutes les données d'un joueur
 
-        .ui.action.left.icon.input
-          i.search.icon
-          input(type='text', placeholder='Pseudo')
-          button.ui.button Chercher
+        #getUser
+          .ui.action.left.icon.input.small-hide.tablet-hide
+            i.search.icon
+            input(type='text', name='username', placeholder='Pseudo')
+            button.ui.button Chercher
+          .ui.form.small-visible.tablet-visible
+            .field
+              input(type='text', name='username', placeholder='Pseudo')
+            button.ui.submit.button Chercher
 
-      .ui.vertical.divider OU
+        .ui.vertical.divider OU
 
       .column.center.aligned.grid
         h3.ui.header
@@ -23,12 +35,16 @@ block content
             | Rechercher une IP
             .sub.header Récupérer tous les joueurs avec cette IP
 
-        .ui.action.left.icon.input
+        .ui.action.left.icon.input.small-hide.tablet-hide
           i.search.icon
-          input(type='text', placeholder='Pseudo')
+          input(type='text', placeholder='IP')
           button.ui.button Chercher
+        .ui.form.small-visible.tablet-visible
+          .field
+            input(type='text', placeholder='IP')
+          button.ui.submit.button Chercher
 
-      .ui.vertical.divider OU
+        .ui.vertical.divider OU
 
       .column.center.aligned.grid
         h3.ui.header
@@ -36,7 +52,25 @@ block content
             | Rechercher une adresse MAC
             .sub.header Récupérer tous joueurs avec cette adresse MAC
 
-        .ui.action.left.icon.input
+        .ui.action.left.icon.input.small-hide.tablet-hide
           i.search.icon
-          input(type='text', placeholder='Pseudo')
+          input(type='text', placeholder='Adresse MAC')
           button.ui.button Chercher
+        .ui.form.small-visible.tablet-visible
+          .field
+            input(type='text', placeholder='Adresse MAC')
+          button.ui.submit.button Chercher
+
+block custom
+  script(type='text/javascript').
+    $('input').on('keyup', function () {
+      var name = $(this).attr('name')
+      $('input[name="' + name + '"]').val($(this).val())
+    })
+    $('#getUser button').on('click', function (e) {
+      e.preventDefault()
+      var btn = $(this)
+      btn.addClass('loading')
+      // Redirect
+      window.location = '/user/' + $('#getUser input[name="username"]').val()
+    })

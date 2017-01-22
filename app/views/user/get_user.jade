@@ -1,0 +1,212 @@
+extends ../layouts/layout
+
+block content
+  .ui.container
+    .ui.segment
+
+      h2.ui.center.aligned.icon.header
+        i.circular.icon(style='padding:.15em!important;')
+          img.ui.circular.image(src='http://web.skins.obsifight.fr/head/' + user.usernames.current + '/128', style='width: 100%')
+        .content
+          | #{user.usernames.current}
+          .sub.header
+            em Inscrit #{moment(user.registerDate).fromNow()}
+
+      .ui.equal.width.grid
+        if user.usernames.histories.length > 0
+          .ui.column
+            h4.ui.horizontal.divider.header
+              i.write.icon
+              | Changement de pseudos
+            table.ui.definition.table
+              tbody
+                each update, index in user.usernames.histories
+                  tr
+                    td #{update.old_username} &rarr; #{update.new_username}
+                    td #{moment(update.update_date).fromNow()}
+
+        .ui.column
+          h4.ui.horizontal.divider.header
+            i.archive.icon
+            | Identifiants
+          table.ui.definition.table
+            tbody
+              tr
+                td(class='two wide column') UUID
+                td #{user.uuid}
+              tr
+                td(class='two wide column') Site
+                td #{user.ids.web}
+              tr
+                td(class='two wide column') Authentification
+                td #{user.ids.auth}
+              tr
+                td(class='two wide column') Logblock
+                td #{user.ids.logblock}
+
+
+        .ui.column
+          h4.ui.horizontal.divider.header
+            i.sign.in.icon
+            | Dernière connexion
+          table.ui.definition.table
+            tbody
+              tr
+                td(class='two wide column') Pseudo
+                td #{user.lastConnection.username}
+              tr
+                td(class='two wide column') Date
+                td Le #{moment(user.lastConnection.date).format('L \à LT')}
+              tr
+                td(class='two wide column') MAC
+                td #{user.lastConnection.mac_adress ? user.lastConnection.mac_adress.join(', ') : 'N/A'}
+              tr
+                td(class='two wide column') IP
+                td #{user.lastConnection.ip}
+
+    .ui.segment
+      h2.ui.header
+        i.wait.icon
+        .content
+          | Ses connexions
+          .sub.header Liste des ses adresses IP et MAC
+      .ui.equal.width.grid
+        .ui.column
+          table.adresses-log.ui.celled.table(cellspacing='0', width='100%')
+            thead
+              tr
+                th IP
+            tbody
+              each ip, index in user.adresses.ip
+                tr
+                  td #{ip}
+        .ui.column
+          table.adresses-log.ui.celled.table(cellspacing='0', width='100%')
+            thead
+              tr
+                th MAC
+            tbody
+              each mac, index in user.adresses.mac
+                tr
+                  td #{mac}
+
+    .ui.grid
+      .ui.two.column.row
+        .ui.column
+          .ui.segment
+            h2.ui.header
+              i.ban.icon
+              .content
+                | Ses sanctions
+                .sub.header Historique de ses sanctions
+            .ui.divider
+            .sanctions
+
+        .ui.column
+          .ui.segment
+            h2.ui.header
+              i.exchange.icon
+              .content
+                | Ses transferts de points
+                .sub.header Historique lors de la V6
+            .ui.divider
+
+
+
+
+block custom
+  link(rel='stylesheet', href='https://cdn.datatables.net/1.10.13/css/dataTables.semanticui.min.css')
+  script(type='text/javascript', src='https://cdn.datatables.net/1.10.13/js/jquery.dataTables.min.js')
+  script(type='text/javascript', src='https://cdn.datatables.net/1.10.13/js/dataTables.semanticui.min.js')
+  script(type='text/javascript', src='https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.17.1/moment.min.js')
+  script(type='text/javascript', src='https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.17.1/locale/fr.js')
+  script(type='text/javascript').
+    $(document).ready(function() {
+      moment().locale('fr')
+      // ========
+      // DATATABLES
+      // ========
+      $('.adresses-log').DataTable({
+        info: false,
+        bLengthChange: false,
+        ordering: false
+      })
+      // =========
+      // SANCTIONS
+      // =========
+      $.get('/user/#{user.usernames.current}/sanctions', function (data) {
+        if (!data.status)
+          return console.error(data.error)
+        // each sanctions
+        data = data.data
+        var sanction
+        var sanctions = []
+        // BANS
+        for (var i = 0; i < data.bans.length; i++) {
+          sanction = data.bans[i]
+          sanctions.push({
+            type: 'ban',
+            staff: sanction.staff.username,
+            date: sanction.date,
+            reason: sanction.reason
+          })
+        }
+        // MUTES
+        for (var i = 0; i < data.mutes.length; i++) {
+          sanction = data.mutes[i]
+          sanctions.push({
+            type: 'mute',
+            staff: sanction.staff.username,
+            date: sanction.date,
+            reason: sanction.reason
+          })
+        }
+        // KICKS
+        for (var i = 0; i < data.kicks.length; i++) {
+          sanction = data.kicks[i]
+          sanctions.push({
+            type: 'kick',
+            staff: sanction.staff.username,
+            date: sanction.date,
+            reason: sanction.reason
+          })
+        }
+        // order
+        sanctions.sort(function(a,b) {
+          return new Date(b.date).getTime() - new Date(a.date).getTime()
+        })
+        // display
+        var icon
+        var action
+        for (var i = 0; i < sanctions.length; i++) {
+          sanction = sanctions[i]
+          // set var
+          switch (sanction.type) {
+            case 'ban':
+              icon = 'ban'
+              action = 'Banni'
+              break;
+            case 'mute':
+              icon = 'write'
+              action = 'Mute'
+              break;
+            case 'kick':
+              icon = 'sign out'
+              action = 'Kick'
+              break;
+            default:
+              continue;
+          }
+          // add to dom
+          $('.sanctions').append('<div class="ui feed">' +
+            '<div class="event">' +
+              '<div class="label"><i class="icon ' + icon + '"></i></div>' +
+              '<div class="content">' +
+                '<div class="date">' + moment(sanction.date).fromNow() + '</div>' +
+                '<div class="summary">' + action + ' par <a>' + sanction.staff + '</a> pour <em>' + sanction.reason + '</em> .</div>' +
+              '</div>' +
+            '</div>' +
+          '</div>')
+        }
+      })
+    })

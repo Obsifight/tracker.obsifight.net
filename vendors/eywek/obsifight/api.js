@@ -18,7 +18,12 @@ module.exports = class {
     }, (err, httpResponse, body) => {
       // check errors
       if (err) return next(err)
-      body = JSON.parse(body)
+      try {
+        body = JSON.parse(body)
+      } catch (e) {
+        console.log('Body: ', body)
+        return next(e)
+      }
       if (httpResponse.statusCode !== 200 || !body || !body.status) return next(body)
       // return token
       return next(undefined, body.data.token)
@@ -50,7 +55,12 @@ module.exports = class {
       }, (err, httpResponse, body) => {
         if (err) return callback(err)
         // result
-        body = JSON.parse(body)
+        try {
+          body = JSON.parse(body)
+        } catch (e) {
+          console.log('Body: ', body)
+          return callback(e)
+        }
         return callback(undefined, {
           status: httpResponse.statusCode === 200,
           code: httpResponse.statusCode,

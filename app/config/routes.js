@@ -5,6 +5,15 @@ module.exports = {
   'get /': {
     action: 'PageController.home',
     auth: true
+  },
+
+  'get /user/:username': {
+    action: 'UserController.get',
+    auth: true
+  },
+  'get /user/:username/sanctions': {
+    action: 'UserController.getSanctions',
+    auth: true
   }
 
 }
