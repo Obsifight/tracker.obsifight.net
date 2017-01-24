@@ -116,6 +116,66 @@ module.exports = {
 
       return res.json({status: true, data: result.body})
     })
+  },
+
+  findByIP: (req, res) => {
+    // Check request
+    if (!req.params.ip || req.params.ip.length === 0)
+      return res.status(400).json({status: false, error: 'Malformed request.'})
+
+    // Find user
+    api.request({
+      route: '/user/find',
+      method: 'post',
+      body: {
+        ip: req.params.ip
+      }
+    }, (err, result) => {
+      if (err) {
+        log.error('Error when login with API')
+        return res.internalError(err)
+      }
+      if (!result.status) // error
+        return res.error(result.code, result.error)
+
+      // set vars
+      result.body.reverse()
+      return res.render('user/find_ip', {
+        connections: result.body,
+        title: 'Recherche par IP',
+        ip: req.params.ip
+      })
+    })
+  },
+
+  findByMAC: (req, res) => {
+    // Check request
+    if (!req.params.mac || req.params.mac.length === 0)
+      return res.status(400).json({status: false, error: 'Malformed request.'})
+
+    // Find user
+    api.request({
+      route: '/user/find',
+      method: 'post',
+      body: {
+        mac: req.params.mac
+      }
+    }, (err, result) => {
+      if (err) {
+        log.error('Error when login with API')
+        return res.internalError(err)
+      }
+      if (!result.status) // error
+        return res.error(result.code, result.error)
+
+      // set vars
+      result.body.reverse()
+      return res.render('user/find_mac', {
+        connections: result.body,
+        title: 'Recherche par adresse MAC',
+        mac: req.params.mac
+      })
+    })
   }
 
 }

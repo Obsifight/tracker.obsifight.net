@@ -1,0 +1,26 @@
+extends ../layouts/layout
+
+block content
+  .ui.container
+    .ui.segment
+
+      h2.ui.header
+        i.disk.outline.icon
+        .content Recherche pour l'adresse MAC&nbsp;
+          em #{mac}
+      .ui.divider
+
+      if connections.length > 0
+        table.ui.celled.table
+          thead
+            tr
+              th Pseudo utilisé
+              th Date de dernière connexion
+          tbody
+              each connection, index in connections
+                tr
+                  td
+                    a(href='/user/' + connection.username) #{connection.username}
+                  td Le #{moment(connection.last_connection).format('L \à LT')}
+      else
+        .ui.negative.message Aucune connexion trouvée avec cette adresse MAC.

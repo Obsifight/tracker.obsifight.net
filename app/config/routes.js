@@ -18,6 +18,14 @@ module.exports = {
   'get /user/:username/money': {
     action: 'UserController.getMoney',
     auth: true
+  },
+  'get /user/find/ip/:ip': {
+    action: 'UserController.findByIP',
+    auth: true
+  },
+  'get /user/find/mac/:mac': {
+    action: 'UserController.findByMAC',
+    auth: true
   }
 
 }
