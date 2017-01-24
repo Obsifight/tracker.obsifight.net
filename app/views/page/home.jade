@@ -37,11 +37,11 @@ block content
 
         .ui.action.left.icon.input.small-hide.tablet-hide
           i.search.icon
-          input(type='text', placeholder='IP')
+          input(type='text', name='ip', placeholder='IP')
           button.ui.button Chercher
         .ui.form.small-visible.tablet-visible
           .field
-            input(type='text', placeholder='IP')
+            input(type='text', name='ip', placeholder='IP')
           button.ui.submit.button Chercher
 
         .ui.vertical.divider OU
@@ -54,15 +54,21 @@ block content
 
         .ui.action.left.icon.input.small-hide.tablet-hide
           i.search.icon
-          input(type='text', placeholder='Adresse MAC')
+          input(type='text', name='mac', placeholder='Adresse MAC')
           button.ui.button Chercher
         .ui.form.small-visible.tablet-visible
           .field
-            input(type='text', placeholder='Adresse MAC')
+            input(type='text', name='mac', placeholder='Adresse MAC')
           button.ui.submit.button Chercher
 
 block custom
+  script(type='text/javascript', src='/assets/js/inputmask.js')
+  script(type='text/javascript', src='/assets/js/inputmask.extensions.js')
   script(type='text/javascript').
+    // Input mask
+    Inputmask('ip').mask($('input[name="ip"]'))
+    Inputmask('mac').mask($('input[name="mac"]'))
+    // inputs
     $('input').on('keyup', function () {
       var name = $(this).attr('name')
       $('input[name="' + name + '"]').val($(this).val())

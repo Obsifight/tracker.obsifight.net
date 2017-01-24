@@ -101,15 +101,22 @@ block content
                 .sub.header Historique de ses sanctions
             .ui.divider
             .sanctions
+              .ui.active.inverted.dimmer
+                .ui.small.text.loader Chargement
+              p
 
         .ui.column
           .ui.segment
             h2.ui.header
-              i.exchange.icon
+              i.money.icon
               .content
                 | Ses transferts de points
                 .sub.header Historique lors de la V6
             .ui.divider
+            .money-timeline
+              .ui.active.inverted.dimmer
+                .ui.small.text.loader Chargement
+              p
 
 
 
@@ -178,6 +185,7 @@ block custom
         // display
         var icon
         var action
+        $('.sanctions').html('')
         for (var i = 0; i < sanctions.length; i++) {
           sanction = sanctions[i]
           // set var
@@ -208,5 +216,75 @@ block custom
             '</div>' +
           '</div>')
         }
+        if (sanctions.length === 0)
+          $('.sanctions').html('<div class="ui negative message">Aucune sanction trouvée.</div>')
+      })
+      // =========
+      // MONEY TIMELINE
+      // =========
+      $.get('/user/#{user.usernames.current}/money', function (data) {
+        if (!data.status)
+          return console.error(data.error)
+        timeline = data.data.timeline
+        // balance
+        $('.money-timeline').html('<div class="ui tiny statistics" style="margin-left: auto;margin-right: auto;display: block;text-align: center;">' +
+          '<div class="statistic">'+
+            '<div class="value">' + data.data.current + '</div>' +
+            '<div class="label">Points actuels</div>'+
+          '</div>'+
+          '<div class="statistic">'+
+            '<div class="value">' + data.data.oldBalance + '</div>' +
+            '<div class="label">Points de l\'ancienne version</div>' +
+          '</div>' +
+        '</div><div class="ui divider"></div>')
+        // display
+        var icon
+        var action
+        var color
+        for (var i = 0; i < timeline.length; i++) {
+          action = timeline[i]
+          // set var
+          switch (action.action_id) {
+            case 'refund':
+              icon = 'recycle'
+              break;
+            case 'purchase_item':
+              icon = 'shopping basket'
+              break;
+            case 'purchase_money_paypal':
+              icon = 'paypal card'
+              break;
+            case 'purchase_money_paysafecard':
+              icon = 'credit card alternative'
+              break;
+            case 'purchase_money_dedipass':
+              icon = 'text telephone'
+              break;
+            case 'purchase_money_stripe':
+              icon = 'stripe'
+              break;
+            case 'purchase_money_stripe':
+              icon = 'exchange'
+              break;
+            default:
+              continue;
+          }
+          if (action.action_type === 'add')
+            color = 'text green'
+          else
+            color = 'text red'
+          // add to dom
+          $('.money-timeline').append('<div class="ui feed">' +
+            '<div class="event">' +
+              '<div class="label"><i class="icon ' + icon + '"></i></div>' +
+              '<div class="content">' +
+                '<div class="date">' + moment(action.date).fromNow() + '</div>' +
+                '<div class="summary">' + action.action_message + '. &nbsp; <span class="' + color + '">' + action.sold + '</span></div>' +
+              '</div>' +
+            '</div>' +
+          '</div>')
+        }
+        if (timeline.length === 0)
+          $('.money-timeline').append('<div class="ui negative message">Aucun transfert de points boutique trouvé.</div>')
       })
     })

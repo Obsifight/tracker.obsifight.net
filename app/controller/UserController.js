@@ -95,6 +95,27 @@ module.exports = {
 
       return res.json({status: true, data: result.body})
     })
+  },
+
+  getMoney: (req, res) => {
+    // Check request
+    if (!req.params.username || req.params.username.length === 0)
+      return res.status(400).json({status: false, error: 'Malformed request.'})
+
+    // Find user
+    api.request({
+      route: '/user/' + req.params.username + '/money/timeline',
+      method: 'get'
+    }, (err, result) => {
+      if (err) {
+        log.error('Error when login with API')
+        return res.status(500).json({status: false, error: 'Error when login with API.'})
+      }
+      if (!result.status) // error
+        return res.status(result.code).json({status: false, error: result.error})
+
+      return res.json({status: true, data: result.body})
+    })
   }
 
 }

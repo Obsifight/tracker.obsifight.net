@@ -14,6 +14,10 @@ module.exports = {
   'get /user/:username/sanctions': {
     action: 'UserController.getSanctions',
     auth: true
+  },
+  'get /user/:username/money': {
+    action: 'UserController.getMoney',
+    auth: true
   }
 
 }
