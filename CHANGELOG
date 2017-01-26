@@ -1,0 +1,6 @@
+2.0.0-alpha.0.2
+  - Add dependencies to package.json
+  - Fix transfer display on user page
+
+2.0.0-alpha.0.1
+  - First release
