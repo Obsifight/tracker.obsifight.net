@@ -1,3 +1,7 @@
+2.0.0
+  - Add potentials double accounts
+  - Add underscore
+
 2.0.0-alpha.0.2
   - Add dependencies to package.json
   - Fix transfer display on user page

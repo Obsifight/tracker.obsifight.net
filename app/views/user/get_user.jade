@@ -70,6 +70,9 @@ block content
         .content
           | Ses connexions
           .sub.header Liste des ses adresses IP et MAC
+      button.ui.basic.button(onclick="$('.ui.modal').modal('show')")
+        i.icon.users
+        | Voir les potentiels doubles comptes
       .ui.equal.width.grid
         .ui.column
           table.adresses-log.ui.celled.table(cellspacing='0', width='100%')
@@ -118,8 +121,25 @@ block content
                 .ui.small.text.loader Chargement
               p
 
-
-
+  .ui.modal
+    .ui.icon.header
+      i.users.icon
+      | Potentiels doubles comptes
+    .content
+      table.ui.celled.table(cellspacing='0', width='100%')
+        thead
+          tr
+            th Pseudo
+            th Adresse IP en commune
+            th Adresse MAC en commune
+            th Dernière connexion
+        tbody
+          each data, username in user.accounts
+            tr
+              td #{username}
+              td #{data.ip.join(', ')}
+              td #{data.mac.join(', ')}
+              td Le #{moment(data.lastConnection).format('L \à LT')}
 
 block custom
   link(rel='stylesheet', href='https://cdn.datatables.net/1.10.13/css/dataTables.semanticui.min.css')
@@ -265,6 +285,12 @@ block custom
               break;
             case 'transfer':
               icon = 'exchange'
+              break;
+            case 'webmarket':
+              icon = 'shop'
+              break;
+            case 'youtube_remuneration':
+              icon = 'youtube'
               break;
             default:
               continue;
