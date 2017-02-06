@@ -19,6 +19,10 @@ module.exports = {
     action: 'UserController.getMoney',
     auth: true
   },
+  'get /user/:username/accounts': {
+    action: 'UserController.getDoubleAccounts',
+    auth: true
+  },
   'get /user/find/ip/:ip': {
     action: 'UserController.findByIP',
     auth: true

@@ -70,15 +70,34 @@ module.exports = {
       if (!result.status) // error
         return res.error(result.code, result.error)
 
+      // set vars
+      return res.render('user/get_user', {
+        user: result.body,
+        title: result.body.usernames.current
+      })
+    })
+  },
+
+  getDoubleAccounts: (req, res) => {
+    // Check request
+    if (!req.params.username || req.params.username.length === 0)
+      return res.badRequest()
+
+    // Find user
+    api.request({
+      route: '/user/' + req.params.username,
+      method: 'get'
+    }, (err, result) => {
+      if (err) {
+        log.error('Error when login with API')
+        return res.internalError(err)
+      }
+      if (!result.status) // error
+        return res.error(result.code, result.error)
+
       // find potential double account with IP + MAC
       let user = result.body
       user.accounts = []
-      /*{
-        username: 'bot4545',
-        lastConnection: '',
-        ip: '',
-        mac: ''
-      }*/
       async.parallel([
         // find with ip
         (cb) => {
@@ -162,9 +181,11 @@ module.exports = {
         }
         user.accounts = accounts
         // set vars
-        return res.render('user/get_user', {
-          user: user,
-          title: user.usernames.current
+        return res.json({
+          status: true,
+          data: {
+            user: user
+          }
         })
       })
     })

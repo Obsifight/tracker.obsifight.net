@@ -70,7 +70,7 @@ block content
         .content
           | Ses connexions
           .sub.header Liste des ses adresses IP et MAC
-      button.ui.basic.button(onclick="$('.ui.modal').modal('show')")
+      button.ui.basic.button#toggleAccountsModal(data-content="Chargement en cours...")
         i.icon.users
         | Voir les potentiels doubles comptes
       .ui.equal.width.grid
@@ -133,13 +133,7 @@ block content
             th Adresse IP en commune
             th Adresse MAC en commune
             th Dernière connexion
-        tbody
-          each data, username in user.accounts
-            tr
-              td #{username}
-              td #{data.ip.join(', ')}
-              td #{data.mac.join(', ')}
-              td Le #{moment(data.lastConnection).format('L \à LT')}
+        tbody#accounts
 
 block custom
   link(rel='stylesheet', href='https://cdn.datatables.net/1.10.13/css/dataTables.semanticui.min.css')
@@ -150,6 +144,27 @@ block custom
   script(type='text/javascript').
     $(document).ready(function() {
       moment().locale('fr')
+      // ================
+      // DOUBLE ACCOUNTS
+      // ================
+      $('#toggleAccountsModal').popup()
+      $.get('/user/#{user.usernames.current}/accounts', function (data) {
+        if (!data.status)
+          return console.error(data.error)
+        data = data.data
+        // add data to modal
+        var html = ''
+        for (var username in data.user.accounts) {
+          html += '<tr>'
+            html += '<td>' + username + '</td>'
+            html += '<td>' + data.user.accounts[username].ip.join(', ') + '</td>'
+            html += '<td>' + data.user.accounts[username].mac.join(', ') + '</td>'
+            html += '<td>Le ' + moment(data.user.accounts[username].lastConnection).format('L \à LT') + '</td>'
+          html += '</tr>'
+        }
+        $('tbody#accounts').append(html)
+        $('#toggleAccountsModal').attr('onclick', "$('.ui.modal').modal('show')").attr('disabled', false).removeClass('disabled').popup('destroy')
+      })
       // ========
       // DATATABLES
       // ========
