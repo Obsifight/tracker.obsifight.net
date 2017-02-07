@@ -214,15 +214,17 @@ module.exports = {
         // handle kills
         (callback) => {
           async.each(data.history.kills, (killed, next) => {
-            if (usersKills[killed] !== undefined)
-              next()
+            if (usersKills[killed] !== undefined) {
+              usersKills[killed].count++
+              return next()
+            }
             // compare users
             api.request({
               route: '/user/compare/' + req.params.username + '/' + killed,
               method: 'get'
             }, (err, result) => {
               if (err) return log.error('Error when login with API')
-              usersKills[killed] = {ip: result.body.commonIPPercentage, mac: result.body.commonMACPercentage}
+              usersKills[killed] = {ip: result.body.commonIPPercentage, mac: result.body.commonMACPercentage, count: 1}
               next()
             })
           }, callback)
@@ -230,15 +232,17 @@ module.exports = {
         // handle deaths
         (callback) => {
           async.each(data.history.deaths, (killer, next) => {
-            if (usersKills[killer] !== undefined)
-              next()
+            if (usersKills[killer] !== undefined) {
+              usersKills[killer].count++
+              return next()
+            }
             // compare users
             api.request({
               route: '/user/compare/' + req.params.username + '/' + killer,
               method: 'get'
             }, (err, result) => {
               if (err) return log.error('Error when login with API')
-              usersDeaths[killer] = {ip: result.body.commonIPPercentage, mac: result.body.commonMACPercentage}
+              usersDeaths[killer] = {ip: result.body.commonIPPercentage, mac: result.body.commonMACPercentage, count: 1}
               next()
             })
           }, callback)

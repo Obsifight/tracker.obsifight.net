@@ -153,6 +153,7 @@ block content
                       thead
                         tr
                           th Pseudo du joueur tué
+                          th Nombre de fois
                           th Pourcentage de correspondance
                       tbody
                   .column
@@ -160,6 +161,7 @@ block content
                       thead
                         tr
                           th Pseudo du joueur tueur
+                          th Nombre de fois
                           th Pourcentage de correspondance
                       tbody
 
@@ -199,6 +201,7 @@ block custom
         for (var username in data.kills.history) {
           html += '<tr>'
             html += '<td>' + username + '</td>'
+            html += '<td>' + data.kills.history[username].count + '</td>'
             html += '<td><b>Adresse IP :</b> ' + data.kills.history[username].ip + '% &ndash; <b>Adresse MAC :</b> ' + data.kills.history[username].mac + '%</td>'
           html += '</tr>'
         }
@@ -208,6 +211,7 @@ block custom
         for (var username in data.deaths.history) {
           html += '<tr>'
             html += '<td>' + username + '</td>'
+            html += '<td>' + data.deaths.history[username].count + '</td>'
             html += '<td><b>Adresse IP :</b> ' + data.deaths.history[username].ip + '% &ndash; <b>Adresse MAC :</b> ' + data.deaths.history[username].mac + '%</td>'
           html += '</tr>'
         }
