@@ -191,6 +191,77 @@ module.exports = {
     })
   },
 
+  getStats: (req, res) => {
+    // Check request
+    if (!req.params.username || req.params.username.length === 0)
+      return res.badRequest()
+    // Find user
+    api.request({
+      route: '/user/' + req.params.username + '/stats',
+      method: 'get'
+    }, (err, result) => {
+      if (err) {
+        log.error('Error when login with API')
+        return res.internalError(err)
+      }
+      if (!result.status) // error
+        return res.error(result.code, result.error)
+      var data = result.body
+      // handle data
+      var usersKills = {}
+      var usersDeaths = {}
+      async.parallel([
+        // handle kills
+        (callback) => {
+          async.each(data.history.kills, (killed, next) => {
+            if (usersKills[killed] !== undefined)
+              next()
+            // compare users
+            api.request({
+              route: '/user/compare/' + req.params.username + '/' + killed,
+              method: 'get'
+            }, (err, result) => {
+              if (err) return log.error('Error when login with API')
+              usersKills[killed] = {ip: result.body.commonIPPercentage, mac: result.body.commonMACPercentage}
+              next()
+            })
+          }, callback)
+        },
+        // handle deaths
+        (callback) => {
+          async.each(data.history.deaths, (killer, next) => {
+            if (usersKills[killer] !== undefined)
+              next()
+            // compare users
+            api.request({
+              route: '/user/compare/' + req.params.username + '/' + killer,
+              method: 'get'
+            }, (err, result) => {
+              if (err) return log.error('Error when login with API')
+              usersDeaths[killer] = {ip: result.body.commonIPPercentage, mac: result.body.commonMACPercentage}
+              next()
+            })
+          }, callback)
+        }
+      ], (err, results) => {
+        return res.json({
+          status: true,
+          data: {
+            kills: {
+              count: data.ks.kills,
+              history: usersKills
+            },
+            deaths: {
+              count: data.ks.deaths,
+              history: usersDeaths
+            },
+            ratio: data.ks.ratio
+          }
+        })
+      })
+    })
+  },
+
   getSanctions: (req, res) => {
     // Check request
     if (!req.params.username || req.params.username.length === 0)

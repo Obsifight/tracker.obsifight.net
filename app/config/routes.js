@@ -23,6 +23,10 @@ module.exports = {
     action: 'UserController.getDoubleAccounts',
     auth: true
   },
+  'get /user/:username/stats': {
+    action: 'UserController.getStats',
+    auth: true
+  },
   'get /user/find/ip/:ip': {
     action: 'UserController.findByIP',
     auth: true

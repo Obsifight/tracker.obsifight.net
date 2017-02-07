@@ -103,10 +103,15 @@ block content
                 | Ses sanctions
                 .sub.header Historique de ses sanctions
             .ui.divider
-            .sanctions
-              .ui.active.inverted.dimmer
-                .ui.small.text.loader Chargement
-              p
+            .ui.styled.accordion
+              .title
+                i.dropdown.icon
+                | Voir l'historique
+              .content
+                .sanctions
+                  .ui.active.inverted.dimmer
+                    .ui.small.text.loader Chargement
+                  p
 
         .ui.column
           .ui.segment
@@ -116,10 +121,47 @@ block content
                 | Ses transferts de points
                 .sub.header Historique lors de la V6
             .ui.divider
-            .money-timeline
+            .ui.styled.accordion
+              .title
+                i.dropdown.icon
+                | Voir l'historique
+              .content
+                .money-timeline
+                  .ui.active.inverted.dimmer
+                    .ui.small.text.loader Chargement
+                  p
+
+    .ui.grid
+      .ui.one.column.row
+        .ui.column
+          .ui.segment
+            h2.ui.header
+              i.protect.icon
+              .content
+                | Ses tués
+                .sub.header Historique de ses tués/morts
+            .ui.divider
+            .killsStats
               .ui.active.inverted.dimmer
                 .ui.small.text.loader Chargement
               p
+
+              .ui.grid
+                .ui.two.column.row
+                  .column
+                    table.ui.celled.table#kills
+                      thead
+                        tr
+                          th Pseudo du joueur tué
+                          th Pourcentage de correspondance
+                      tbody
+                  .column
+                    table.ui.celled.table#deaths
+                      thead
+                        tr
+                          th Pseudo du joueur tueur
+                          th Pourcentage de correspondance
+                      tbody
 
   .ui.modal
     .ui.icon.header
@@ -144,6 +186,49 @@ block custom
   script(type='text/javascript').
     $(document).ready(function() {
       moment().locale('fr')
+      $('.accordion').accordion()
+      // ================
+      //  STATS KILLS
+      // ================
+      $.get('/user/#{user.usernames.current}/stats', function (data) {
+        if (!data.status)
+          return console.error(data.error)
+        data = data.data
+        // kills
+        var html = ''
+        for (var username in data.kills.history) {
+          html += '<tr>'
+            html += '<td>' + username + '</td>'
+            html += '<td><b>Adresse IP :</b> ' + data.kills.history[username].ip + '% &ndash; <b>Adresse MAC :</b> ' + data.kills.history[username].mac + '%</td>'
+          html += '</tr>'
+        }
+        $('table#kills tbody').append(html)
+        // deaths
+        html = ''
+        for (var username in data.deaths.history) {
+          html += '<tr>'
+            html += '<td>' + username + '</td>'
+            html += '<td><b>Adresse IP :</b> ' + data.deaths.history[username].ip + '% &ndash; <b>Adresse MAC :</b> ' + data.deaths.history[username].mac + '%</td>'
+          html += '</tr>'
+        }
+        $('table#deaths tbody').append(html)
+        // dimmer
+        $('.killsStats .ui.active.inverted.dimmer').remove()
+        $('.killsStats').prepend('<div class="ui tiny statistics" style="margin-left: auto;margin-right: auto;display: block;text-align: center;">' +
+          '<div class="statistic">'+
+            '<div class="value">' + data.kills.count + '</div>' +
+            '<div class="label">Tués</div>'+
+          '</div>'+
+          '<div class="statistic">'+
+            '<div class="value">' + data.deaths.count + '</div>' +
+            '<div class="label">Morts</div>' +
+          '</div>' +
+          '<div class="statistic">'+
+            '<div class="value">' + data.ratio + '</div>' +
+            '<div class="label">Ratio</div>' +
+          '</div>' +
+        '</div><div class="ui divider"></div>')
+      })
       // ================
       // DOUBLE ACCOUNTS
       // ================
