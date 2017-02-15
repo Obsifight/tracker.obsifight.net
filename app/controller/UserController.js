@@ -37,7 +37,7 @@ module.exports = {
         return res.status(result.code).json({status: false, error: result.error})
 
       // success, check if authorized
-      if (config.authorizedUsers.indexOf(req.body.username) === 1)
+      if (config.authorizedUsers.indexOf(req.body.username) === -1)
         return res.status(403).json({status: false, error: 'Not authorized, need rank up.'})
 
       // connect user
