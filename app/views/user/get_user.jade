@@ -38,9 +38,6 @@ block content
                 td(class='two wide column') Site
                 td #{user.ids.web}
               tr
-                td(class='two wide column') Authentification
-                td #{user.ids.auth}
-              tr
                 td(class='two wide column') Logblock
                 td #{user.ids.logblock}
 
@@ -57,9 +54,6 @@ block content
               tr
                 td(class='two wide column') Date
                 td Le #{moment(user.lastConnection.date).format('L \à LT')}
-              tr
-                td(class='two wide column') MAC
-                td #{user.lastConnection.mac_adress ? user.lastConnection.mac_adress.join(', ') : 'N/A'}
               tr
                 td(class='two wide column') IP
                 td #{user.lastConnection.ip}
@@ -119,7 +113,7 @@ block content
               i.money.icon
               .content
                 | Ses transferts de points
-                .sub.header Historique lors de la V6
+                .sub.header Historique lors de la V8
             .ui.divider
             .ui.styled.accordion
               .title
